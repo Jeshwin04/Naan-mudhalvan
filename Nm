@@ -1,0 +1,44 @@
+def dynamic_pricing(base_price, demand, avg_demand, inventory, competitor_price, seasonality, customer_loyalty, cost_of_goods):
+    price = base_price
+    
+    # Adjust for demand
+    demand_factor = 0.1 if demand > avg_demand else -0.1
+    price += price * demand_factor
+    
+    # Adjust for supply
+    supply_factor = 0.05 if inventory < 100 else -0.05
+    price += price * supply_factor
+    
+    # Adjust for competitor pricing
+    competitor_factor = -0.1 if price > competitor_price else 0.1
+    price += price * competitor_factor
+    
+    # Adjust for seasonality (e.g., holiday season)
+    if seasonality == "high":
+        price += price * 0.2  # Increase price by 20% in high season
+    elif seasonality == "low":
+        price -= price * 0.1  # Decrease price by 10% in low season
+    
+    # Adjust for customer loyalty (e.g., discount for loyal customers)
+    if customer_loyalty:
+        price -= price * 0.05  # 5% discount for loyal customers
+    
+    # Ensure price covers the cost of goods (minimum profit margin of 20%)
+    minimum_price = cost_of_goods * 1.2
+    if price < minimum_price:
+        price = minimum_price
+    
+    return round(price, 2)
+
+# Example Usage
+base_price = 100
+demand = 150
+avg_demand = 100
+inventory = 50
+competitor_price = 95
+seasonality = "high"
+customer_loyalty = True
+cost_of_goods = 70
+
+final_price = dynamic_pricing(base_price, demand, avg_demand, inventory, competitor_price, seasonality, customer_loyalty, cost_of_goods)
+print("Final Price:", final_price)
